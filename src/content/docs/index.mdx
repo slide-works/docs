@@ -1,0 +1,28 @@
+---
+title: SlideWorks documentation
+description: Set up SlideWorks, build decks with an agent over MCP, and present them from a URL.
+template: splash
+hero:
+  tagline: Web slide decks that agents build over MCP and anyone presents from a URL.
+  actions:
+    - text: What is SlideWorks
+      link: /start/overview/
+      icon: right-arrow
+    - text: GitHub
+      link: https://github.com/slide-works/slideworks
+      icon: external
+      variant: minimal
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+:::caution[In development]
+SlideWorks has not had its first release. These pages are outlines and fill in as features ship.
+:::
+
+<CardGrid>
+  <LinkCard title="Get started" description="Run SlideWorks with Docker and sign in." href="/start/quickstart/" />
+  <LinkCard title="Using the app" description="The deck library, the deck page, sharing and presenting." href="/ui/library/" />
+  <LinkCard title="Agents and MCP" description="Connect an agent and build a deck from building blocks." href="/agents/connect/" />
+  <LinkCard title="Reference" description="Glossary and release notes." href="/reference/glossary/" />
+</CardGrid>

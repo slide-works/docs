@@ -1,0 +1,86 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+
+/* Cobalt palette and type from slide-works/slideworks.app site/tokens.css (SW-1 D4).
+   Starlight resolves system preference and the reader's choice to data-theme. */
+:root {
+  --color-bg: #0f1424;
+  --color-surface: #171d31;
+  --color-surface-2: #20283f;
+  --color-border: #2c3552;
+  --color-text: #eef1fa;
+  --color-muted: #a3abc6;
+  --color-accent: #7f9cff;
+  --color-accent-fg: #0b1433;
+  --color-accent-soft: #1d2a5c;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+
+  --sl-color-white: var(--color-text);
+  --sl-color-gray-1: #d6dbec;
+  --sl-color-gray-2: var(--color-muted);
+  --sl-color-gray-3: #7c86a6;
+  --sl-color-gray-4: var(--color-border);
+  --sl-color-gray-5: var(--color-surface-2);
+  --sl-color-gray-6: var(--color-surface);
+  --sl-color-black: var(--color-bg);
+  --sl-color-accent-low: var(--color-accent-soft);
+  --sl-color-accent: var(--color-accent);
+  --sl-color-accent-high: var(--color-accent);
+  --sl-color-bg: var(--color-bg);
+  --sl-color-bg-nav: var(--color-surface);
+  --sl-color-bg-sidebar: var(--color-surface);
+  --sl-color-hairline: var(--color-border);
+  --sl-color-hairline-light: var(--color-border);
+  --sl-color-hairline-shade: var(--color-border);
+  --sl-color-text: var(--color-text);
+  --sl-font: var(--font-sans);
+  --sl-font-mono: var(--font-mono);
+  --sl-content-width: 48rem;
+}
+
+:root[data-theme='light'] {
+  --color-bg: #f4f5f7;
+  --color-surface: #ffffff;
+  --color-surface-2: #eceef3;
+  --color-border: #dcdfe7;
+  --color-text: #161b2e;
+  --color-muted: #59607a;
+  --color-accent: #2f5bea;
+  --color-accent-fg: #ffffff;
+  --color-accent-soft: #e6ecfd;
+
+  --sl-color-gray-1: #20283f;
+  --sl-color-gray-2: var(--color-muted);
+  --sl-color-gray-3: #737a93;
+  --sl-color-gray-4: #b9bfcf;
+  --sl-color-gray-5: var(--color-border);
+  --sl-color-gray-6: var(--color-surface-2);
+  --sl-color-gray-7: var(--color-surface);
+}
+
+.site-title {
+  gap: 0.875rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.site-title img {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.sidebar-content a[aria-current='page'] {
+  color: var(--color-accent-fg);
+  background-color: var(--color-accent);
+}
+
+.sl-markdown-content :is(h1, h2, h3, h4), h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
