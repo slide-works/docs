@@ -1,14 +1,69 @@
 ---
 title: "Deck page"
-description: "See every slide, its speaker notes and the activity log."
+description: "See every slide, its speaker notes, the look and the activity log of one deck."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+Select a deck's title in the [library](/ui/library/) to open its deck page. The page is the place to look at a deck as a whole.
 
-## Outline
+## Header
 
-- Slide grid
-- Speaker notes
-- Activity log: who changed what and through which tool
+The header shows:
+
+- The deck's title and slide count.
+- Who can open it, such as **Private** or **Anyone with the link**.
+- **Share** (owners only). See [Sharing](/ui/sharing/).
+- The **▶ Present** button. Its arrow opens three ways to present:
+  - **Present** opens the deck in the player, in this tab.
+  - **Presenter view** opens the audience window in a new window, and the presenter window in this tab. See [Presenter view](/ui/presenter-view/).
+  - **Control from your phone** shows a QR code that opens the phone remote.
+
+Only the owner sees the arrow, the Share button and the Look panel. Viewers see the deck and the **▶ Present** button.
+
+## Slide grid
+
+Every slide appears as a thumbnail, in order. Select a thumbnail to show its details on the right.
+
+If the deck has no slides, the page says **No slides yet**. Ask a connected agent to add some.
+
+## Slide details
+
+The panel for the selected slide shows:
+
+- **Slide**: its number.
+- **Layout**: the kind of slide, such as `bullets` or `compare`.
+- **Steps**: how many reveals the slide has.
+- **Link**: a link that opens the deck at this slide.
+- **Speaker notes**: the notes for the slide. Only the owner sees them. A slide without notes says **No speaker notes.**
+
+Speaker notes never reach viewers, the audience window or the player.
+
+## Look (owners only)
+
+The **Look** panel sets how the deck looks:
+
+- **Template**, which sets the layouts and the chrome.
+- **Palette**, which sets the colours. It shows a swatch and a contrast check.
+- Chrome, logo and draft settings.
+
+Each change saves at once. Deep dives are set per slide, not in this panel.
+
+## Activity
+
+The **Activity** list is the deck's change log, newest first. Each row says who made the change, what changed, when, and how:
+
+- **You**, for a change you made in the browser.
+- **AI** plus the agent's name, for a change an agent made.
+- **via MCP** for a change made through an agent's tools, with the tool's name.
+- **in the browser** for a change made on the site.
+
+Sharing changes appear here too, with the agent's name when an agent made them.
+
+## Missing decks
+
+If the page says **Deck not found**, the deck was deleted, or it isn't yours to open. Choose **Back to your decks** to return to the library.
+
+## Related
+
+- [Deck library](/ui/library/)
+- [Sharing](/ui/sharing/)
+- [Presenting](/ui/presenting/)

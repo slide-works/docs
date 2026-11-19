@@ -1,14 +1,48 @@
 ---
 title: "Sharing"
-description: "Control who can open and edit a deck."
+description: "Choose who can open a deck, and see what agents can change."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+Sharing decides who can open a deck. Only the owner can change slides, and only the owner can change sharing in the browser.
 
-## Outline
+## Open the share dialog
 
-- Link sharing
-- People and roles
-- What agents can change
+On a deck page, select **Share**. The dialog shows the current setting and a link you can copy.
+
+## Who can open a deck
+
+Pick one of three levels, then select **Save**.
+
+| Level | Who can open it | Notes |
+|---|---|---|
+| **Private** | Only you, and agents signed in as you. | The default for a new deck. |
+| **Anyone with the link** | Anyone who has the link. | Read and present only. The link is hard to guess, but anyone you forward it to can open it. |
+| **Named people** | Only the people you list, when they sign in with these emails. | Type an email, then press Enter or a comma to add it as a chip. |
+
+Anyone who opens a deck can view it and present it in the player. Only the owner can open the presenter view and the phone remote. See [Presenting](/ui/presenting/).
+
+If you save **Named people** without a valid email, the dialog shows the message next to the field.
+
+## People and roles
+
+A deck has two kinds of people:
+
+- **The owner** signs in and can change everything: slides, sharing, the look, the talk length and the presenter view.
+- **Viewers** can open the deck and present it in the player. Viewers can't see speaker notes and can't change anything.
+
+There is no editor role. Only the owner changes slides.
+
+## Audience join
+
+Sharing controls who can open the deck. To let an audience follow a talk from their phones, see [Audience join](/ui/audience-join/).
+
+## What agents can change
+
+An agent signed in as you can change sharing with the `set_sharing` tool, the same as you can in the dialog. Each change appears in the deck's activity list, with the agent's name. The dialog also shows the last change to sharing, with who made it.
+
+See [Agent tools](/agents/tools/) for the full list of tools.
+
+## Related
+
+- [Deck page](/ui/deck/)
+- [Deck library](/ui/library/)
