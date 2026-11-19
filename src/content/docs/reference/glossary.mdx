@@ -1,14 +1,129 @@
 ---
 title: "Glossary"
-description: "Terms used across SlideWorks."
+description: "The terms SlideWorks uses, in the words the app and its agents use."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+## Decks and slides
 
-## Outline
+**Deck**
+: A talk: a title, its slides, speaker notes, a look, a sharing setting and a log of changes.
 
-- Deck, slide, block, slot
-- Template and palette
-- Part
+**Slide**
+: One page of a deck. A slide has a layout and the text and blocks that fill it.
+
+**Layout**
+: The shape of a slide, such as `bullets`, `compare` or `chart`. Each layout has named slots, and the server checks every slot. See the layouts in the [agent tools](/agents/tools/).
+
+**Block**
+: A small piece inside a slide, such as a callout, a chip, a badge or a stamp. The [building blocks](/agents/blocks/) are the ready-made pieces an agent uses.
+
+**Part**
+: A section of the talk. Each part opens with a divider slide. The part tracker and footer show where you are.
+
+**Deep dive**
+: Optional material, marked on its slide. Dividers list a part's deep dives, so you can skip them when short of time.
+
+**Speaker notes**
+: Notes for the presenter. They show in the presenter window and on the phone remote, never on the big screen.
+
+**Activity log**
+: The record of every change to a deck, with who made it and through which tool.
+
+## Looks
+
+**Look**
+: A deck's template and palette together. Change a deck's look in its **Look** panel.
+
+**Template**
+: The structure of a deck: which layouts it allows, its footer and tracker, and its fonts and shapes. The built-in templates are Talk, Workshop and Update.
+
+**Palette**
+: The colours of a deck. The built-in palettes are Cobalt (the default), Ember, Plum and Midnight.
+
+**Chrome**
+: The frame around each slide: the part tracker, the footer, the progress bar and the draft stamp.
+
+## Sharing and presenting
+
+**Sharing**
+: Who can open a deck: private, anyone with the link, or named people. See [Sharing](/ui/sharing/).
+
+**Present**
+: Start the talk in the player, in the browser on a laptop or a phone. See [Presenting](/ui/presenting/).
+
+**Presenter window**
+: The window for the presenter, with notes, a timer and an overview of the slides. The audience window follows it.
+
+**Presenter view**
+: The presenter window and what it shows. See [Presenter view](/ui/presenter-view/).
+
+**Phone remote**
+: A page on the presenter's phone that moves the talk forward and back and shows the next slide and notes. Only the deck's owner, signed in, can drive a talk from it.
+
+**Talk length**
+: An optional length for the talk. The timer turns amber five minutes before the end and red when over time.
+
+## Live talks and audience
+
+**Live session**
+: A run of a deck that the audience can join. Each **Go live** opens a new session behind the deck's standing join code.
+
+**Go live**
+: Start a live session, so the audience can join and answer.
+
+**Join code**
+: The six-digit code for a deck's live session, shown as two groups of three, such as `482 913`. Guests type it, or scan the QR code.
+
+**Join slide**
+: A dark slide that shows the QR code, the join code and the join address, so the room can follow on their phones.
+
+**Join address**
+: The address guests open to join. It's the join domain if the server has one, otherwise the public address with `/j/` in front of the code. See [Audience join](/ui/audience-join/).
+
+**Guest**
+: A person in the audience. A guest gives no name and needs no account. The browser keeps a random ID for the session, so a reload doesn't count the guest twice.
+
+**Big screen**
+: What the audience sees on the projector or shared screen: the slide, and any live poll or question on it.
+
+## Polls
+
+**Poll**
+: A question with 2 to 8 options that guests answer on their phones while the deck is live. Each poll lives on a poll slide. See [Live polls](/ui/polls/).
+
+**Round**
+: One run of a poll. Opening the poll starts a round. **New round** asks the same question again from zero. Earlier rounds are kept.
+
+**Results setting**
+: When a poll's counts show: live, after the guest has answered, or after the poll closes.
+
+**Correct answer**
+: An optional right answer for a poll. The presenter reveals it after closing the poll. There are no scores.
+
+## Questions and reactions
+
+**Q&A**
+: Questions from the room, sent from the phone while the deck is live. Guests can upvote each other's questions. See [Q&A and reactions](/ui/qa-reactions/).
+
+**Show on screen**
+: The presenter puts a question on the big screen over the current slide.
+
+**Review first**
+: A deck setting that holds new questions until the presenter approves them.
+
+**Reactions**
+: Five fixed emoji that guests send during a talk: thumbs up, heart, laugh, wow and clap. They float up the edge of the big screen and count up in the presenter panel.
+
+## Agents
+
+**Agent**
+: An AI assistant, such as Claude, that builds or edits decks for you over MCP. An agent acts as the person who approved it.
+
+**MCP**
+: The protocol agents use to talk to SlideWorks. The server is at `/mcp` on your SlideWorks address. See [Connect an agent](/agents/connect/).
+
+**Preview**
+: A picture of a slide that an agent or the share card renders from the server.
+
+**Share card**
+: A 1200 by 630 pixel image of a deck, used as the preview when its link is shared.

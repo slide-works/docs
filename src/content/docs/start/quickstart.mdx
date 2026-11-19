@@ -1,14 +1,67 @@
 ---
-title: "Quick start: Docker"
-description: "Run SlideWorks on your machine with one container."
+title: "Quickstart with Docker"
+description: "Run SlideWorks on one machine with Docker Compose and sign in."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+This runs SlideWorks on your own machine at `http://localhost:8080`. It takes a few minutes. For a server on the internet, read [Install for production](/start/production/) instead.
 
-## Outline
+## What you need
 
-- Pull the image
-- Run it with a volume for the SQLite database
-- Sign in and create your first deck
+- Docker and Docker Compose.
+- A Google Cloud project, for a Google OAuth client. Sign-in is with Google only, so SlideWorks needs this to let you in.
+- Git, to get the source.
+
+## 1. Create a Google OAuth client
+
+1. In the Google Cloud console, open **APIs & Services → Credentials** and create an **OAuth client ID** of type **Web application**.
+2. Under **Authorised redirect URIs**, add `http://localhost:8080/signin-google`.
+3. Set up the OAuth consent screen. SlideWorks asks only for the person's email, name and picture.
+4. Keep the client ID and the client secret for the next step.
+
+## 2. Create the settings file
+
+Get the source and make a `.env` file next to `docker-compose.yml` in the `src` folder. Use your own Google email as the admin email.
+
+```bash
+git clone https://github.com/slide-works/slideworks.git
+cd slideworks/src
+cat > .env <<'EOF'
+SLIDEWORKS_PUBLIC_URL=http://localhost:8080
+SLIDEWORKS_GOOGLE_CLIENT_ID=<client id>
+SLIDEWORKS_GOOGLE_CLIENT_SECRET=<client secret>
+SLIDEWORKS_ADMIN_EMAIL=you@example.com
+SLIDEWORKS_RENDER_TOKEN_KEY=<random secret>
+EOF
+```
+
+Create the render token key with `openssl rand -base64 32` and paste the result in place of `<random secret>`. Keep `.env` out of version control, because it holds the client secret.
+
+For the full list of settings, see [Configuration](/start/configuration/).
+
+## 3. Start SlideWorks
+
+```bash
+docker compose up -d --build
+curl -fsS http://localhost:8080/health
+```
+
+The first build takes a few minutes. The health check reports the commit the image was built from. Database migrations run when the app starts, so you don't set anything up by hand.
+
+## 4. Sign in
+
+Open `http://localhost:8080` and sign in with Google, using the admin email from your `.env` file. You land on the decks library.
+
+If you sign in with another Google account, it waits on the pending page until you approve it. See [Sign in](/start/sign-in/).
+
+## 5. Connect an agent
+
+The library shows a **Connect an agent** banner with the MCP address, `http://localhost:8080/mcp`. Agents connect there. See [Connect an agent](/agents/connect/).
+
+## Stop or update
+
+```bash
+docker compose down        # stop; your data stays in the slide-works-data volume
+docker compose up -d --build   # rebuild from the source you have
+```
+
+Your decks, images and sign-in keys live in the data volume, so stopping the container keeps them.
