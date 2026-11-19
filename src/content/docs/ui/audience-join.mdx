@@ -1,0 +1,64 @@
+---
+title: "Audience join"
+description: "How the audience joins a live talk from their phones with a code or a QR code, what they see, and what they can't see."
+---
+
+Your audience joins a live talk on their own phones. They need no app and no account. They type a short code or scan a QR code, and their phone follows the slides.
+
+## How people join
+
+Every deck has one standing six-digit join code, shown on screen as two groups of three, such as `482 913`.
+
+There are two ways in:
+
+- **Scan the QR code.** It opens the join link for the deck. On the public instance that is `https://slideworks.live/482913`.
+- **Type the code.** Open `https://slideworks.live` (or `/join` on your own instance), then type the six digits on the number pad.
+
+A code never starts with 0. If a code doesn't work, the phone asks them to check the code on the screen. If too many tries come from one network, the phone asks them to wait a minute.
+
+## Starting a live talk
+
+Only the deck's owner can go live.
+
+1. Open the deck and press **Go live** in the live chip in the player.
+2. The join code and QR code now work.
+3. When the talk is over, press **End** in the same chip.
+
+Each **Go live** opens a new session behind the same code. The QR code never changes, but answers from one run are kept apart from the next.
+
+Guests who arrive before you press **Go live** wait in a lobby. When you go live, they move on to the slides by themselves.
+
+## What a guest sees
+
+After joining, the phone shows "You're in" and then mirrors the slide on screen.
+
+- The phone shows the current slide only. It has no notes, no timer and no list of other slides.
+- Guests can't go back to earlier slides. They follow the talk.
+- When an interactive slide such as a poll comes up, it appears on the phone below the slide. See [Polls](/ui/polls/).
+- If the connection drops, the page says "Can't reach the room" and keeps trying every few seconds. It catches up when the connection returns.
+- Each guest's phone needs cookies. The page explains this if they are blocked.
+
+When the talk ends, the phone says so. Guests can close the page at any time.
+
+## The join slide and the join bar
+
+Two parts of a deck show the code to the room.
+
+- **The `join` layout** is a dark slide that shows the code, the QR code and, unless you hide it, how many people have joined. Before you go live, it says the talk isn't live yet.
+- **The join bar** is a small QR code and the code, in the bottom-right corner of every slide. It is off by default. Turn it on or off with the **Join bar** button in the live chip while you're live.
+
+The joined count shows on the join slide and in the live chip. Guests don't see the count.
+
+## Privacy: what guests can and can't do
+
+Guests give no name and make no account.
+
+- The phone keeps a random ID in the browser, so a reload doesn't count the guest twice.
+- Guests can answer [polls](/ui/polls/). Their answers are kept with that session and are not linked to a name.
+- The presenter sees totals only. Nobody can see who picked what.
+- Guests can't see your notes, timer, other slides or the deck's settings.
+- The guest page's footer has a **Privacy** link that says the same in plain words.
+
+## Your own instance
+
+The join link is `https://slideworks.live` on the public instance. If you host SlideWorks yourself, set `SLIDEWORKS_JOIN_URL` to a short domain you control. Without it, join links use your own address, such as `https://your-host/j/482913`. See [Configuration](/start/configuration/).
