@@ -3,9 +3,9 @@ title: "Agent tools"
 description: "Every MCP tool an agent can call in SlideWorks, what it does and its main inputs."
 ---
 
-An agent works with 23 tools. Each one acts as the signed-in person, so it can only read or change decks that person can. Read [Connect an agent](/agents/connect/) first.
+An agent works with 23 tools. Each one acts as the signed-in person, so it works only on decks that person owns. Read [Connect an agent](/agents/connect/) first.
 
-Every tool returns a JSON object. A slide that can't render is refused with an error that names the field, for example `practice.do[2].lead: required`.
+Tools return JSON. A refused call returns an error message instead. A slide that can't render is refused with an error that names the field, for example `practice.do[2].lead: required`.
 
 Pass `deck` as the deck's id. Slides are numbered from 1.
 
@@ -14,7 +14,7 @@ Pass `deck` as the deck's id. Slides are numbered from 1.
 | Tool | What it does | Key inputs |
 |---|---|---|
 | `list_decks` | Lists your decks, most recently changed first: id, title, subtitle, slide count, sharing level, player URL and last change. | None |
-| `create_deck` | Creates a private deck and returns its id, player URL, sharing level, look and the template's layouts, outline and house style. | `title` (up to 120 characters), `subtitle`, `author` (footer name, up to 80), `parts` (up to 8 part names of 40 characters), `template`, `palette` |
+| `create_deck` | Creates a private deck and returns its id, player URL, sharing level, look and the template's layouts, outline and house style. | `title` (up to 120 characters), `subtitle` (up to 200), `author` (footer name, up to 80), `parts` (up to 8 part names of 40 characters), `template`, `palette` |
 | `get_deck` | Reads a deck: title, parts, sharing, and every slide with its number, layout, part, steps, revision, slots and notes. | `deck` |
 | `get_deck_url` | Returns the player link. Give a slide to link to it, and a step to link to that point of its reveal. | `deck`, `slide`, `step` |
 
@@ -46,7 +46,7 @@ After `move_slide`, `delete_slide` or any change that renumbers slides, read the
 
 | Tool | What it does | Key inputs |
 |---|---|---|
-| `upload_image` | Starts an image upload and returns the image id and a one-time upload URL. The agent PUTs the raw bytes to that URL, then uses the id in an image slot. | `deck`, `name` (file name, shown in the change log), `contentType` (`image/png`, `image/jpeg`, `image/webp` or `image/gif`) |
+| `upload_image` | Starts an image upload and returns the image id and a one-time upload URL that works for 10 minutes. The agent PUTs the raw bytes to that URL (no auth header), then uses the id in an image slot. | `deck`, `name` (file name, up to 200 characters, shown in the change log), `contentType` (`image/png`, `image/jpeg`, `image/webp` or `image/gif`) |
 
 Images can be PNG, JPEG, WebP or GIF, up to 10 MB. SVG is not accepted.
 
@@ -73,8 +73,8 @@ Polls are slides with the `poll` layout. Their question and options are slots, s
 |---|---|---|
 | `update_poll` | Changes poll settings. Give only what changes. Refused while a round is open. | `deck`, `slide`, `pick` (`one` or `upTo`), `max` (with `upTo`), `results` (`live`, `afterAnswer` or `afterClose`), `correct` (option number, or 0 to clear), `opens` (`onArrival` or `manual`) |
 | `add_poll_option` | Adds an option at the end. Allowed while a round is open. A poll has at most 8 options, each up to 60 characters. | `deck`, `slide`, `text` |
-| `open_poll` | Opens the poll's round so the audience can answer. The deck must be live. | `deck`, `slide` |
-| `close_poll` | Closes the open round. The result is kept. | `deck`, `slide` |
+| `open_poll` | Opens the poll's round so the audience can answer. A person must have taken the deck live first. | `deck`, `slide` |
+| `close_poll` | Closes the open round. The result is kept. The deck must be live. | `deck`, `slide` |
 | `get_poll_results` | Returns each round's options, answered and joined counts, response rate and counts per option. Totals only. | `deck`, `slide` |
 
 An agent can open and close a poll, but can't reveal counts, show the answer or start a new round. The presenter does those.
