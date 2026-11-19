@@ -1,14 +1,84 @@
 ---
-title: "Tool reference"
-description: "Every MCP tool, its arguments and what it returns."
+title: "Agent tools"
+description: "Every MCP tool an agent can call in SlideWorks, what it does and its main inputs."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+An agent works with 23 tools. Each one acts as the signed-in person, so it can only read or change decks that person can. Read [Connect an agent](/agents/connect/) first.
 
-## Outline
+Every tool returns a JSON object. A slide that can't render is refused with an error that names the field, for example `practice.do[2].lead: required`.
 
-- create_deck
-- Adding and editing slides
-- set_sharing
+Pass `deck` as the deck's id. Slides are numbered from 1.
+
+## Decks
+
+| Tool | What it does | Key inputs |
+|---|---|---|
+| `list_decks` | Lists your decks, most recently changed first: id, title, subtitle, slide count, sharing level, player URL and last change. | None |
+| `create_deck` | Creates a private deck and returns its id, player URL, sharing level, look and the template's layouts, outline and house style. | `title` (up to 120 characters), `subtitle`, `author` (footer name, up to 80), `parts` (up to 8 part names of 40 characters), `template`, `palette` |
+| `get_deck` | Reads a deck: title, parts, sharing, and every slide with its number, layout, part, steps, revision, slots and notes. | `deck` |
+| `get_deck_url` | Returns the player link. Give a slide to link to it, and a step to link to that point of its reveal. | `deck`, `slide`, `step` |
+
+## Slides
+
+Every slide has a layout and slots. Use [`list_layouts`](/agents/blocks/#layouts) to see the slots for each layout.
+
+| Tool | What it does | Key inputs |
+|---|---|---|
+| `add_slide` | Adds a slide and returns its number, steps, revision, URL and any warnings. | `deck`, `layout`, `slots`, `part`, `position` (leave out to add at the end), `notes`, `deep_dive` |
+| `update_slide` | Replaces a slide's slots, and optionally its layout or part. Refused if the slide changed since the revision you read. | `deck`, `slide`, `revision` (from `get_deck`), `slots`, `layout`, `part`, `deep_dive` |
+| `move_slide` | Moves a slide to another number. Slides in between shift by one. | `deck`, `slide`, `to` |
+| `delete_slide` | Removes a slide from the deck. The slide is kept on the server but no longer shows. A poll with a round open can't be deleted. | `deck`, `slide` |
+| `set_notes` | Sets speaker notes on one or more slides in one change. Send empty text to clear. | `deck`, `notes` (a list of slide number and text, up to 4000 characters each) |
+
+After `move_slide`, `delete_slide` or any change that renumbers slides, read the deck again with `get_deck` before you update a slide. Slides that moved get a new revision.
+
+## Layouts, blocks and looks
+
+| Tool | What it does | Key inputs |
+|---|---|---|
+| `list_layouts` | Lists the layouts: name, purpose, whether the slide is dark, which lists reveal one item per step, and the JSON Schema of its slots. | `template` (lists only that template's layouts) |
+| `list_blocks` | Lists the small blocks used inside slots (callout, chip, badge, stamp, journey) and their schemas. | None |
+| `list_templates` | Lists templates: name, purpose, allowed layouts, chrome defaults, outline, house style and the palette each locks. | None |
+| `list_palettes` | Lists palettes: name, swatch, colour tokens, default flag and contrast result. | `size` (number of swatch colours), `colour` (a word such as a colour name or a mood) |
+| `set_look` | Changes a deck's template, palette, logo, draft mark or chrome. Give only what changes. | `deck`, `template`, `palette`, `logo` (an uploaded image id, or null), `draft`, `chrome` (`tracker`, `footer`, `progress`) |
+
+## Images
+
+| Tool | What it does | Key inputs |
+|---|---|---|
+| `upload_image` | Starts an image upload and returns the image id and a one-time upload URL. The agent PUTs the raw bytes to that URL, then uses the id in an image slot. | `deck`, `name` (file name, shown in the change log), `contentType` (`image/png`, `image/jpeg`, `image/webp` or `image/gif`) |
+
+Images can be PNG, JPEG, WebP or GIF, up to 10 MB. SVG is not accepted.
+
+## Sharing and presenting
+
+| Tool | What it does | Key inputs |
+|---|---|---|
+| `set_sharing` | Sets who can open the deck. `private` is only you. `link` is anyone with the link, who can view and present but not edit. `named` is only the listed people, after they sign in. Returns the share link. | `deck`, `level`, `viewers` (up to 50 email addresses; replaces the list) |
+| `set_talk_length` | Sets the talk length in minutes (1 to 600), or clears it. The presenter's timer shows the time left. | `deck`, `minutes` (null clears it) |
+
+## Previews
+
+| Tool | What it does | Key inputs |
+|---|---|---|
+| `preview_deck` | Returns one render URL per slide, with instructions. The agent screenshots each URL at 1920 by 1080 and checks the PNGs. The URLs expire after 10 minutes. | `deck`, `slides` (numbers; leave out for all) |
+
+The server does not render slides for previews. The agent does.
+
+## Polls
+
+Polls are slides with the `poll` layout. Their question and options are slots, set with `add_slide` and `update_slide`. Their settings use the tools below.
+
+| Tool | What it does | Key inputs |
+|---|---|---|
+| `update_poll` | Changes poll settings. Give only what changes. Refused while a round is open. | `deck`, `slide`, `pick` (`one` or `upTo`), `max` (with `upTo`), `results` (`live`, `afterAnswer` or `afterClose`), `correct` (option number, or 0 to clear), `opens` (`onArrival` or `manual`) |
+| `add_poll_option` | Adds an option at the end. Allowed while a round is open. A poll has at most 8 options, each up to 60 characters. | `deck`, `slide`, `text` |
+| `open_poll` | Opens the poll's round so the audience can answer. The deck must be live. | `deck`, `slide` |
+| `close_poll` | Closes the open round. The result is kept. | `deck`, `slide` |
+| `get_poll_results` | Returns each round's options, answered and joined counts, response rate and counts per option. Totals only. | `deck`, `slide` |
+
+An agent can open and close a poll, but can't reveal counts, show the answer or start a new round. The presenter does those.
+
+## Connecting
+
+Agents connect to the server at `/mcp` and sign in through OAuth. See [Connect an agent](/agents/connect/).
