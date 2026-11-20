@@ -1,14 +1,94 @@
 ---
-title: "Building blocks"
-description: "The slide layouts an agent can use and the slots each one takes."
+title: "Layouts and building blocks"
+description: "The slide layouts an agent fills in, the blocks inside them, and what each one is for."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+A slide is a **layout** plus **slots**. The layout decides how the slide looks. The slots hold the words, numbers and images. An agent never writes HTML or Markdown. Slot text is plain text.
 
-## Outline
+Agents pick a layout with `add_slide` and fill its slots. `list_layouts` returns each layout's slots as a JSON Schema, and `list_blocks` returns the blocks.
 
-- The 17 building blocks
-- Slots and validation errors
-- Parts and the part tracker
+Each slide can also have a part (a 1-based number from the deck's parts) and speaker notes. Viewers never see notes.
+
+## Layouts
+
+### Dark layouts
+
+These four are dark. Use them to open, divide, close and invite the room.
+
+| Layout | For |
+|---|---|
+| `title` | The opening slide: the deck's title, a kicker, subtitle, tagline, author, affiliation and an optional stamp. |
+| `divider` | Opens a part. Its number and the list of parts come from the deck. |
+| `close` | The closing slide: a headline of up to three written lines, with an optional sub and author. |
+| `join` | Shows a QR code, the join code and the address, so the room can follow on their phones. The code comes from the live session, not from slots. Its count of joined guests can be hidden. |
+
+### Content layouts
+
+| Layout | For | Steps |
+|---|---|---|
+| `bullets` | A headline over 1 to 8 points. Each point is plain text, or a bold lead with text. Can carry one callout. | One per point with `reveal: one-by-one` |
+| `two-column` | Two columns side by side. Each column holds a list, a paragraph or an image. | None |
+| `practice` | What to do, what comes back and what to avoid, with an optional callout. | None |
+| `compare` | Two panels side by side: a failure mode and a success mode. | None |
+| `big-number` | One number that carries the slide, with a caption, detail and source. | None |
+| `quote` | A quotation and its attribution. | None |
+| `image` | One large image with a headline, optional points and a caption. | None |
+| `table` | A table of 2 to 6 columns and 1 to 6 rows. Cells can carry a tone, and one row can be highlighted. | None |
+| `chart` | A line or bar chart of 1 to 3 series, with an optional caption and a dashed marker line. | None |
+| `gantt` | A timeline of 1 to 5 rows across 2 to 8 columns. Each bar is done, slips, stopped or ship. | None |
+| `numbered-cards` | 2 to 4 numbered cards, each a title and text. | One per card with `reveal: one-by-one` |
+| `rules` | 1 to 4 numbered rules, each a title and text. | One per rule with `reveal: one-by-one` |
+| `cards` | 1 to 3 cards, each with an optional badge, title, text and chips. | One per card with `reveal: one-by-one` |
+
+### Live layouts
+
+These layouts show things from the live session. Their content comes from the room, not from the slide.
+
+| Layout | For |
+|---|---|
+| `poll` | A question and 2 to 8 options that the room answers on their phones while the deck is live. The poll's settings (picks, when results show, the correct answer, when it opens) are set with `update_poll`, not in the slots. See [Agent tools](/agents/tools/#polls). |
+| `qa` | A slide for audience questions. Q&A is coming soon: the slide exists, but guests can't ask questions yet. See [Q&A and reactions](/ui/qa-reactions/). |
+
+Guests join through the `join` layout's code or QR code. See [Audience join](/ui/audience-join/) and [Polls](/ui/polls/).
+
+## Slots
+
+Each layout has its own slots. Some are required, and most have a length limit. For example, a `bullets` headline is up to 80 characters, and a `big-number` value is up to 6 characters.
+
+Some slot rules to keep in mind:
+
+- Text is plain. Do not send Markdown or HTML.
+- A list has a minimum and maximum number of items.
+- An image needs an id from `upload_image`, plus alt text that says what the image shows.
+- A `two-column` side has exactly one of `items`, `text` or `image`.
+- A `chart` needs one value per x label, and a `table` needs one cell per column.
+
+If a slide breaks a rule, the server refuses it and names the field. Fix that field and try again.
+
+## Blocks
+
+Blocks sit inside a layout's slots. Call `list_blocks` for their schemas.
+
+| Block | For |
+|---|---|
+| `callout` | A highlighted sentence with a tone and a fill. Used in `bullets` and `practice`. |
+| `chip` | A small tag, such as a tool or a practice. Used in `cards`. |
+| `badge` | A short label at the top of a card, such as a role. Used in `cards`. |
+| `stamp` | A tilted label on the title slide, such as "Draft". |
+| `journey` | The deck's parts as a timeline on dividers. The server draws it from the deck's parts. Agents don't set it. |
+
+### Callout tones and fills
+
+A callout's `tone` is `accent`, `positive`, `negative` or `inverse`. The aliases `good`, `bad` and `info` also work. Colours come from the deck's palette.
+
+The `fill` is `soft` (the default, a tint) or `solid` (the tone's colour).
+
+Colour should mean something. Use positive for good news, negative for a problem and accent for a point to notice.
+
+## Speaker notes
+
+Notes are set with `add_slide`, `update_slide` or `set_notes`. Viewers never see them. A slide marked as a deep dive reads its notes with the prefix "Deep dive. Skip if short of time." See [Templates and palettes](/agents/templates/#deep-dives).
+
+## Which layouts a template allows
+
+Each template allows a set of layouts. A layout the template does not allow still shows, and the agent gets a warning, so it can choose another layout instead. See [Templates and palettes](/agents/templates/).

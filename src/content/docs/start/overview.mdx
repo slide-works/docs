@@ -1,14 +1,34 @@
 ---
-title: "What is SlideWorks"
-description: "What SlideWorks does and who it is for."
+title: "What SlideWorks is"
+description: "How SlideWorks works: an agent builds the deck, you present it from a URL, and the audience joins on their phones."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+SlideWorks is a web app for slide decks. A deck is a set of slides in the browser, not a file you email around. You open it by link, share it, and present it from a laptop or a phone.
 
-## Outline
+## How it works
 
-- Agents build decks over MCP from typed building blocks
-- People open, share and present decks from a URL
-- What ships first and what comes later
+1. **An agent builds the deck.** You ask an agent, such as Claude, for a deck. It connects to SlideWorks over MCP and builds the slides from ready-made blocks: titles, bullets, tables, charts, timelines and more. It never writes HTML.
+2. **You open it from a link.** Every deck has a link. Open it in the library or from the agent's reply. You can read the slides, the speaker notes and the log of changes.
+3. **You present from the URL.** Press **Present** to start the talk. A presenter window shows the notes, a timer and an overview while the audience window follows. From a phone you can drive the talk with the phone remote.
+4. **The audience joins on their phones.** Show the QR code or the six-digit join code. Guests follow the slide on their phones, and answer live polls.
+
+## What you get
+
+- **Decks** that agents build and people edit, with a log of who changed what.
+- **Looks.** Each deck has a template and a palette. The templates are Talk, Workshop and Update. The palettes are Cobalt, Ember, Plum and Midnight.
+- **Presenting** with a presenter window, a phone remote and a timer.
+- **Audience join** with a QR code or a six-digit code. No app to install and no name needed.
+- **Live polls** during a live talk. Audience questions and reactions are coming soon.
+
+## Who can do what
+
+- Sign-in is with Google. A new person waits for an admin to approve them. See [Sign in](/start/sign-in/).
+- Anyone with the link can view a deck only if the owner shares it that way. See [Sharing](/ui/sharing/).
+- Agents act as the person who approved them, and can see and change only the decks that person can. See [Connect an agent](/agents/connect/).
+- Guests need no account. They join a live session with a code.
+
+## Next steps
+
+- [Run it with Docker](/start/quickstart/) to try SlideWorks on one machine.
+- [Install it for production](/start/production/) behind a TLS proxy.
+- [Build your first deck](/agents/connect/) with an agent.

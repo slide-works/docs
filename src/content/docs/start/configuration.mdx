@@ -1,14 +1,71 @@
 ---
 title: "Configuration reference"
-description: "Every setting SlideWorks reads, with defaults."
+description: "Every setting SlideWorks reads, with what it does and its default."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+SlideWorks reads its settings from environment variables. With Docker Compose, put them in the `.env` file next to `docker-compose.yml`. The compose file passes the variables to the container.
 
-## Outline
+Every setting has the `SLIDEWORKS_` prefix except one, the render token key. The table below lists each one the app reads.
 
-- Environment variables
-- Sign-in settings
-- Storage settings
+## Addresses
+
+| Variable | Required | Default | What it does |
+|---|---|---|---|
+| `SLIDEWORKS_PUBLIC_URL` | Yes, outside development | None | The address people and agents reach SlideWorks at, such as `https://slides.example.com`. Deck links, the sign-in callback and the agent (MCP) address are built from it. Must be an absolute `http` or `https` URL. Serve SlideWorks at the root of its host. |
+| `SLIDEWORKS_JOIN_URL` | No | Unset | A short domain for audience join links, such as `https://slideworks.live`. Must be an `http` or `https` origin with no path, query or fragment. Unset, join links are `<SLIDEWORKS_PUBLIC_URL>/j/<code>`. |
+
+The join link is what the QR code holds and what an audience types. The app builds it from these settings, never from the request's `Host` header.
+
+## Sign-in
+
+| Variable | Required | Default | What it does |
+|---|---|---|---|
+| `SLIDEWORKS_GOOGLE_CLIENT_ID` | For sign-in | Unset | The Google OAuth client ID. |
+| `SLIDEWORKS_GOOGLE_CLIENT_SECRET` | For sign-in | Unset | The Google OAuth client secret. |
+| `SLIDEWORKS_ADMIN_EMAIL` | Recommended | Unset | The Google email of the first admin. That person becomes an approved admin when they sign in, but only while no admin exists. If it's unset and no admin exists, the server logs a warning at startup. |
+
+Sign-in is on only when both Google values are set. With neither set, the sign-in page says sign-in isn't set up. With only one set, the server logs a warning and sign-in stays off.
+
+## Render keys
+
+| Variable | Required | Default | What it does |
+|---|---|---|---|
+| `RenderTokens__Key` | Yes, outside development | None | The secret that signs the short-lived tokens for slide previews and share cards. At least 32 characters, such as the output of `openssl rand -base64 32`. The app refuses to start without it. |
+| `SLIDEWORKS_RENDER_TIMEOUT` | No | `00:00:20` | How long one render may take, as a time span. |
+| `SLIDEWORKS_RENDER_URL` | No | Unset | The address the headless browser opens to render slides. Unset, it uses the app's own loopback address. Set it only when the app can't reach itself that way. |
+
+The compose file fills `RenderTokens__Key` from `SLIDEWORKS_RENDER_TOKEN_KEY` in `.env`, so set that name in `.env`. Changing the key only expires preview links already handed out.
+
+## Storage
+
+| Variable | Required | Default | What it does |
+|---|---|---|---|
+| `SLIDEWORKS_DB_PATH` | No | `/data/slide-works.db` | The SQLite database file. The session-cookie keys are kept in a `slide-works-keys` folder next to it, so a restart or a new image doesn't sign everyone out. |
+| `SLIDEWORKS_DATA_PATH` | No | `/data` | The data folder for uploaded images. Images are stored under `images/<deck id>/`. |
+
+Keep both on local disk. See [Install for production](/start/production/#data-and-backups).
+
+## Proxies
+
+| Variable | Required | Default | What it does |
+|---|---|---|---|
+| `SLIDEWORKS_TRUSTED_PROXIES` | Behind a proxy | Unset, which trusts no proxy | A comma-separated list of proxy addresses or CIDR networks, such as `172.18.0.0/16`. For a request from one of these, the client's address comes from the last `X-Forwarded-For` entry. That address is the one the rate limits count. The app refuses to start if an entry is not a valid address or network. |
+
+## Logging
+
+| Variable | Required | Default | What it does |
+|---|---|---|---|
+| `SLIDEWORKS_SEQ_URL` | No | Unset | Also send logs to this Seq server. Unset, logs go to the console only, which `docker logs` shows. |
+| `SLIDEWORKS_SEQ_API_KEY` | No | Unset | The Seq API key, if your Seq server needs one. |
+
+## Example `.env`
+
+```bash
+SLIDEWORKS_PUBLIC_URL=https://slides.example.com
+SLIDEWORKS_JOIN_URL=https://slideworks.live
+SLIDEWORKS_GOOGLE_CLIENT_ID=<client id>
+SLIDEWORKS_GOOGLE_CLIENT_SECRET=<client secret>
+SLIDEWORKS_ADMIN_EMAIL=you@example.com
+SLIDEWORKS_RENDER_TOKEN_KEY=<random secret, at least 32 characters>
+SLIDEWORKS_TRUSTED_PROXIES=172.18.0.0/16
+```

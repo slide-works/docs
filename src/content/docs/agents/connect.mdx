@@ -1,14 +1,87 @@
 ---
 title: "Connect an agent"
-description: "Connect Claude Code, Cursor or another MCP client."
+description: "Connect Claude Code, Claude, VS Code, Cursor or another MCP client to SlideWorks, and sign in."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+An agent builds and edits decks through the SlideWorks MCP server. Connecting takes one URL. There is no API key to copy.
 
-## Outline
+The server is at `/mcp` on the address your SlideWorks runs at. On the hosted service that is:
 
-- Add the MCP server
-- Approve the agent in the browser
-- Revoke access
+```
+https://prod.slideworks.app/mcp
+```
+
+Self-hosters use their own address, as set by `SLIDEWORKS_PUBLIC_URL`. See [Configuration](/start/configuration/).
+
+## What signing in means
+
+- The agent acts as you. It can see and change only the decks you can.
+- You must be an approved person. A new sign-up waits until an admin approves it.
+- The agent's access is limited to decks, the one scope it asks for.
+
+## Connect Claude Code
+
+```bash
+claude mcp add --transport http slideworks https://prod.slideworks.app/mcp
+```
+
+Then run `/mcp` in Claude Code and choose **Authenticate** for `slideworks`.
+
+## Connect Claude (web and desktop)
+
+1. Open **Settings → Connectors**.
+2. Choose **Add custom connector**.
+3. Name it `SlideWorks` and enter the `/mcp` URL.
+
+Claude connects from Anthropic's servers, so the URL must be reachable from the internet over HTTPS.
+
+## Connect VS Code
+
+Add this to `.vscode/mcp.json` in a workspace, or to your user `mcp.json`:
+
+```json
+{
+  "servers": {
+    "slideworks": { "type": "http", "url": "https://prod.slideworks.app/mcp" }
+  }
+}
+```
+
+## Connect Cursor
+
+Add this to `~/.cursor/mcp.json`, or to `.cursor/mcp.json` in a project:
+
+```json
+{
+  "mcpServers": {
+    "slideworks": { "url": "https://prod.slideworks.app/mcp" }
+  }
+}
+```
+
+## Other clients
+
+Any MCP client that supports the streamable HTTP transport and OAuth discovery connects the same way. Give it the `/mcp` URL and nothing else.
+
+## Sign in and approve
+
+The first time the agent connects, it opens a browser window:
+
+1. Sign in with Google. SlideWorks only uses Google sign-in.
+2. On the consent page, check the agent's name and the address it returns to, then choose **Allow** or **Deny**.
+3. After you allow it, the agent can use your decks.
+
+## Tokens and expiry
+
+- An agent's access token lasts one hour.
+- Its refresh token lasts 30 days.
+
+## Revoking access
+
+An admin can revoke a person from the admin users page. When they do, that person's agents stop working too, because their tokens stop being accepted.
+
+## Next steps
+
+- [Agent tools](/agents/tools/) lists every tool an agent can call.
+- [Building blocks](/agents/blocks/) lists the layouts an agent fills.
+- [Templates and palettes](/agents/templates/) explains how an agent picks a look.

@@ -1,14 +1,45 @@
 ---
-title: "Sign-in and approvals"
-description: "How people sign up and how an admin approves them."
+title: "Sign in and approve people"
+description: "Sign in with Google, the first admin, how sign-ups wait for approval, and how admins approve or revoke people."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+SlideWorks signs people in with Google only. Anyone can sign in, but a new person can't use SlideWorks until an admin approves them.
 
-## Outline
+## Sign in with Google
 
-- Google sign-in
-- Pending accounts and admin approval
-- The first admin from SLIDEWORKS_ADMIN_EMAIL
+Open the SlideWorks address and choose **Sign in with Google**. SlideWorks asks Google only for your email address, name and picture.
+
+The sign-in needs a Google OAuth client, set up by whoever runs the server. See [Install for production](/start/production/) to set one up.
+
+## The first admin
+
+The first admin is the Google email set in `SLIDEWORKS_ADMIN_EMAIL`.
+
+- When that person signs in and no admin exists yet, they become an approved admin.
+- After that, the setting does nothing, so it's safe to leave it set.
+- If no admin exists and the setting is unset, the server logs a warning at startup, because nobody can approve sign-ups.
+
+## Sign-ups wait for approval
+
+Anyone else who signs in is **pending**. They see the pending page, and they can't open decks until an admin approves them.
+
+The header's **Admin** link shows how many people are waiting.
+
+## Approve people
+
+Admins manage people on the **Admin** page (`/admin/users`). For each person, an admin can:
+
+- **Approve** a pending person, so they can use SlideWorks.
+- **Reject** a pending person. A rejected person gets no session, and the sign-in page tells them an admin hasn't approved the account.
+- **Revoke** an approved person's access. Their agents' tokens stop working too.
+- **Make an admin**, or remove admin rights.
+
+The list shows pending people first, then approved, then rejected.
+
+## Agents and sign-in
+
+An agent can act only for an approved person. When you connect an agent, you sign in and approve it on a consent page, so it acts as you. See [Connect an agent](/agents/connect/).
+
+## Guests don't sign in
+
+Audience members don't need an account. They join a live talk with a code and a random guest ID kept in their browser. See [Audience join](/ui/audience-join/).

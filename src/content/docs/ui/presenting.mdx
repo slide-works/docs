@@ -1,14 +1,86 @@
 ---
 title: "Presenting"
-description: "Present a deck in the browser on a laptop or a phone."
+description: "Present a deck in the browser on a laptop or a phone, with keys, touch, blackout and the part tracker."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+A deck presents in the browser. A deck's link opens the player, and so does **▶ Present**. The same player works on a laptop and on a phone.
 
-## Outline
+To give a talk with notes and a timer, use the presenter view. See [Presenter view](/ui/presenter-view/).
 
-- Keyboard and touch controls
-- Part tracker and progress
-- Presenting from a phone
+## Start the player
+
+Select **▶ Present** on the deck page or in the [library](/ui/library/). The deck opens full screen in the player, in the same tab.
+
+Anyone with access to the deck can present it this way. Only the owner can drive a talk from the presenter view or the phone remote.
+
+## Move through the deck
+
+The player has a bar under the slide:
+
+- **Previous** and **Next** buttons.
+- **n / total**: the slide number, and the total number of slides.
+- One dot per reveal on the current slide, filled as you reach each one.
+- A thin progress bar showing how far through the deck you are.
+- **Fullscreen**, where the browser allows it.
+- For the owner, the live chip with **Go live**. See [Audience join](/ui/audience-join/).
+
+Each **Next** shows the next reveal on the slide. When the reveals run out, it moves to the next slide.
+
+## Keyboard
+
+| Key | Does |
+|---|---|
+| → / PageDown / Space | Next |
+| ← / PageUp / Shift+Space | Previous |
+| Home / End | First / last slide |
+| F | Fullscreen (not on iPhone, where the browser has no fullscreen) |
+
+Keys that use Ctrl, Cmd or Alt are left to the browser. A held key moves once, not on every repeat.
+
+## Touch
+
+- Tap the left third of the slide to go back, and the right third to go forward.
+- Swipe left to go forward, or right to go back. A swipe needs to move at least 50 pixels, and mostly sideways.
+- Two fingers, such as a pinch or a two-finger scroll, cancel the gesture.
+
+The same controls work on a phone, so you can present from one without a laptop. To drive a talk on a laptop from a phone, use the phone remote. See [Presenter view](/ui/presenter-view/#the-phone-remote).
+
+## Part tracker and progress
+
+Content slides show the deck's parts along the top, with the current part highlighted. Earlier parts are marked done.
+
+Content slides also show a footer with the slide number, the deck's title and the author (or the date). A thin bar along the bottom grows as the talk moves on. The template sets these, and the owner can switch each one on or off in the Look panel on the [deck page](/ui/deck/).
+
+## Blackout
+
+Blackout hides the slide, so the audience sees a black screen while you deal with something else.
+
+- In the presenter window, press **B** or **.** to black out the audience window. Press again to bring the slide back.
+- The phone remote has a **Blackout** button too.
+
+Blackout is a talk control, so the player you open yourself doesn't have a blackout key. Use the presenter window or the phone remote.
+
+## Skipping deep dives
+
+A slide can be marked as a deep dive. Turn on **Skip deep dives** in the presenter window (**D**) or on the phone to skip them. The next-slide panel names the deep dives it skips. Turn skipping off to bring them back in order.
+
+## The audience window
+
+When a presenter window is open, a second window can follow the talk. It is the same player, opened by **Presenter view**. The audience window follows the presenter's moves.
+
+While a presenter window or a phone is connected:
+
+- The control bar is hidden, and clicks and swipes on the audience window do nothing.
+- Keys still work. They move the talk for every window and phone at once.
+
+To put the audience window on the projector, drag it there, then press **F** in that window to go full screen.
+
+## Presenting from a phone
+
+Open the deck on your phone and select **▶ Present**. Use touch, as above. You can also control a laptop talk from your phone. See [Presenter view](/ui/presenter-view/#the-phone-remote).
+
+## Related
+
+- [Presenter view](/ui/presenter-view/): notes, timer, overview and the phone remote.
+- [Audience join](/ui/audience-join/): let an audience follow along from their phones.
+- [Polls](/ui/polls/): live audience polls. [Questions and reactions](/ui/qa-reactions/) are coming soon.

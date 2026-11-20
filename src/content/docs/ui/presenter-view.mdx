@@ -1,0 +1,125 @@
+---
+title: "Presenter view"
+description: "Give a talk with notes, the next slide, a timer, an overview and a phone remote."
+---
+
+The presenter view is the window you keep on the laptop while the audience window goes on the projector. It shows the slide the audience sees, the next one, your notes and the timer.
+
+Only the deck's owner can open it.
+
+## Start a talk
+
+On the deck page, open the arrow next to **▶ Present** and choose **Presenter view**.
+
+SlideWorks opens two windows from the same click:
+
+- The **audience window** opens in a new window. Drag it onto the projector, then press **F** in it for fullscreen.
+- The **presenter window** opens in this tab.
+
+If the browser blocks the second window, allow pop-ups for SlideWorks and try again.
+
+The audience window follows the talk only when you are signed in as the owner on that machine. If it opens without you signed in, it shows the deck as a viewer sees it. Sign in as the owner on that machine and open it again.
+
+If you close the audience window, the presenter window shows **No audience window** with a **Reopen audience window** button.
+
+## What the presenter window shows
+
+- **Top bar**: the deck's title, the current part, the live chip, the timer, the clock, and the connected windows and phones.
+- **Now**: the slide the audience sees, with its place in the deck and the reveal dots. The previous and next buttons move the talk.
+- **Next**: the next reveal, the next slide, or the end of the deck. When deep dives are ahead, it says how many, or which ones it is skipping.
+- **Notes**: the speaker notes for the current slide. Use **A−** and **A+** to change their size. The size is kept in this browser only.
+- **Tools**: Overview, Notes, Skip deep dives, Blackout, and the phone button.
+
+Notes and the next-slide panel are visible only to you. Viewers never see them.
+
+## Move through the talk
+
+Use the buttons under **Now**, or the keys below. Every move waits for the server to confirm it, so the audience window and the phone always show the same slide.
+
+| Key | Does |
+|---|---|
+| → / PageDown / Space | Next |
+| ← / PageUp | Previous |
+| Home / End | First / last slide |
+| A slide number, then Enter | Jump to that slide (up to 4 digits) |
+| O | Overview |
+| N | Notes |
+| B or . | Blackout (press again to bring the slide back) |
+| D | Skip deep dives |
+| T | Reset the timer |
+| Esc | Close the overview or any open dialog |
+
+Keys do nothing while you type in a box. The window takes focus once it is ready, so its keys work without a click.
+
+Polls add their own keys in this window. See [Polls](/ui/polls/).
+
+## Timer
+
+- The timer starts on your first move, a slide or a reveal, not when the window opens.
+- Select the **Start timer** or **Pause timer** button, or use the phone, to start or pause it.
+- Select the reset button, or press **T**, to set it back to zero. After a reset it stays at zero until the next move.
+- With a talk length set, the top bar shows the time left, and then the time over. It turns amber with 5 minutes left and red once you are over.
+- The clock shows the time of day.
+
+See [Talk length](#talk-length) for how to set one.
+
+## Overview
+
+Press **O**, or select **Overview**, to see every slide in a grid. The slides are grouped by part, and deep dives are labelled. Select a slide to jump to it. Press **Esc** or **O** to close the overview.
+
+The overview's header counts the slides, parts and deep dives. It also says when skipping is on.
+
+## Skip deep dives
+
+A slide marked as a deep dive is skipped while **Skip deep dives** is on. Use it when you are running late. The next-slide panel names the deep dives it skips. Turn skipping off to bring them back in order.
+
+## Talk length
+
+A deck can have an optional talk length, in whole minutes from 1 to 600. The owner sets it through the API, or an agent sets it with `set_talk_length`. See [Agent tools](/agents/tools/). Clearing it removes the countdown, and the timer then only counts up. Each change appears in the deck's activity.
+
+## The phone remote
+
+Use your phone as a remote when you want to move through the talk from wherever you stand.
+
+To connect a phone:
+
+1. In the presenter window, select **Use your phone as a remote**. Or open the deck page's **▶ Present** arrow and choose **Control from your phone**.
+2. Scan the QR code, or open the link on your phone.
+3. Sign in with the same account. You only need to sign in once per phone.
+4. Pick the talk. The phone opens straight to it when the talk is live.
+
+You can also go to `/remote` on the phone and pick the talk from the list. A talk appears there while its presenter window or audience window is open.
+
+The phone shows:
+
+- **Status**: **Live**, **Connecting**, or **Reconnecting**.
+- **Timer**: tap it to start, pause or resume.
+- **Now**: the current slide, with its notes underneath.
+- **Next** and **Previous** buttons. Next is the large button.
+- **Slides**: a list of every slide, grouped by part. Tap one to jump there.
+- **Skip deep dives** and **Blackout**.
+
+The phone and the laptop share one state. A move on either one moves both windows. The screen stays awake while the page is open, where the phone's browser allows it.
+
+Phone buttons do nothing while the phone is not live. Taps are not queued for later. If a button fails, the phone shows a message and nothing changes.
+
+## When the connection drops
+
+- The presenter window shows **Reconnecting**. Until the connection returns, moves, blackout, skip and the timer do nothing there. O, N, Esc, the overview and the notes still work.
+- The audience window's own keys still move its local player while it is offline. Those moves don't skip deep dives, and they are dropped when the connection returns, because the live state wins.
+- When the connection returns, the presenter window and the audience window catch up to the latest state.
+- The phone shows **Reconnecting** and rejoins when the page becomes visible again, for example after the screen was locked.
+- If every window leaves while the server keeps running, the talk is kept for 2 hours. Reopening a window in that time resumes it where it was.
+- If the server restarts, the talk is lost from memory. The first window to rejoin recreates it from its own last position and timer.
+
+## Limits
+
+- A talk lives in one server process. Running two instances of SlideWorks at once does not share talks between them.
+- Two very quick presses on two devices can collapse into one move, because the last press wins.
+- The presenter window can't make the audience window full screen. Press **F** in the audience window itself.
+
+## Related
+
+- [Presenting](/ui/presenting/): the player, keys and touch controls.
+- [Deck page](/ui/deck/): where you start a talk.
+- [Audience join](/ui/audience-join/): let an audience follow along on their phones.

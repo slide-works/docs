@@ -1,14 +1,113 @@
 ---
 title: "Install for production"
-description: "Run SlideWorks on a server behind HTTPS."
+description: "Run SlideWorks on a server with Docker Compose, a TLS proxy, a join domain, a data volume and image updates."
 ---
 
-:::note[Coming soon]
-This page is an outline. It will be written when the feature ships.
-:::
+This guide sets SlideWorks up on a server that people reach over the internet. SlideWorks is one container: the server, the web app, the SQLite database and the uploaded images, all on one data volume.
 
-## Outline
+## What you need
 
-- Reverse proxy and HTTPS
-- Persistent storage and backups
-- Upgrades
+- A host with Docker and Docker Compose.
+- A public URL, such as `https://slides.example.com`, and a TLS proxy in front of the container. Caddy, nginx, Traefik or a cloud load balancer all work.
+- A Google Cloud OAuth client for sign-in, with the redirect URI `https://slides.example.com/signin-google`.
+- Optionally, a short domain for audience joins, such as `slideworks.live`.
+
+## 1. Write the settings
+
+In the `src` folder, create a `.env` file. Use the public URL you will serve SlideWorks at, exactly as people type it, without a trailing slash.
+
+```bash
+SLIDEWORKS_PUBLIC_URL=https://slides.example.com
+SLIDEWORKS_GOOGLE_CLIENT_ID=<client id>
+SLIDEWORKS_GOOGLE_CLIENT_SECRET=<client secret>
+SLIDEWORKS_ADMIN_EMAIL=you@example.com
+SLIDEWORKS_RENDER_TOKEN_KEY=<random secret, from openssl rand -base64 32>
+SLIDEWORKS_TRUSTED_PROXIES=172.18.0.0/16
+```
+
+Keep `.env` out of version control. It holds the client secret and the render token key.
+
+`SLIDEWORKS_PUBLIC_URL` and `SLIDEWORKS_RENDER_TOKEN_KEY` are required outside development, and the app won't start without them. Every setting is in [Configuration](/start/configuration/).
+
+## 2. Run the container
+
+The compose file builds the image from the source. To run a published image instead, change `build: .` in `docker-compose.yml` to:
+
+```yaml
+image: ghcr.io/slide-works/slideworks:latest
+```
+
+Then start it:
+
+```bash
+docker compose up -d --build
+curl -fsS http://127.0.0.1:8080/health
+```
+
+The compose file publishes port 8080 on `127.0.0.1` only. Your proxy is the one way in from outside the host.
+
+## 3. Put a TLS proxy in front
+
+The proxy ends TLS and forwards plain HTTP to port 8080. It must:
+
+- Forward every path to the container, including `/mcp`, `/oauth/*`, `/.well-known/*`, `/signin-google` and `/hubs/deck`.
+- Pass WebSocket upgrades on `/hubs/deck`, which carries live updates.
+- Allow request bodies up to 10 MB, the image upload limit.
+- Keep the client's address in `X-Forwarded-For`. Caddy does this by default.
+
+A Caddy example:
+
+```
+slides.example.com {
+    reverse_proxy slide-works:8080
+}
+```
+
+Set `SLIDEWORKS_TRUSTED_PROXIES` to the proxy's network, as in the example above. Without it, every visitor shares one rate-limit budget. Don't set it to a network you don't control.
+
+SlideWorks takes its own scheme and host from `SLIDEWORKS_PUBLIC_URL` only. It ignores `X-Forwarded-Proto` and `X-Forwarded-Host`, so set the public URL to exactly the address the proxy serves.
+
+## 4. Add a join domain (optional)
+
+Audience links work on the public URL with no extra setup. A short domain makes the link and QR code easier to read out and scan.
+
+1. Point a DNS record for the short domain at the same proxy.
+2. Give the proxy a site block for it, so it gets a certificate.
+3. Keep the `Host` header when the proxy forwards to SlideWorks. SlideWorks tells the two domains apart by `Host`. Caddy keeps it by default. With nginx, use `proxy_set_header Host $host;`.
+4. Set `SLIDEWORKS_JOIN_URL=https://slideworks.live` in `.env`, then run `docker compose up -d`. A plain `docker compose restart` doesn't re-read `.env`.
+
+```
+slides.example.com, slideworks.live {
+    reverse_proxy slide-works:8080
+}
+```
+
+The join domain serves only what a guest needs. Every other path on it redirects to the public URL. For the details, see [Live audience join](/ui/audience-join/).
+
+## 5. Check the install
+
+1. Open the public URL and sign in with the admin email.
+2. Sign in with a second Google account and check that it waits on the pending page. Approve it from **Admin**, then check it can open the library.
+3. Connect an agent with `https://slides.example.com/mcp`. See [Connect an agent](/agents/connect/).
+
+## Data and backups
+
+The database, the sign-in keys and the uploaded images all live on the `/data` volume. Back the volume up as one unit.
+
+- Keep `/data` on a local disk, such as the named Docker volume. Never bind-mount it onto a network share (NFS, SMB or 9p). SQLite locking corrupts the database there.
+- Take backups with SQLite's `.backup` command while the app runs, not by copying the `.db` file. The image has no `sqlite3`, so run it from a throwaway container that mounts the volume. The exact commands are in the self-hosting guide in the source repository.
+- Run one instance per volume. Live updates and rate limits are held in memory.
+
+## Updates
+
+- New images run database migrations on startup, so an update upgrades the data itself.
+- To update, pull the new image and recreate the container:
+
+  ```bash
+  docker compose pull
+  docker compose up -d
+  ```
+
+  Use `docker compose up -d` rather than `restart`, so the container picks up any new `.env` values.
+- The CI builds publish `:latest` and a tag for each commit (`:<commit sha>`) on every push to `main`. To stay on one build, use the commit tag in the `image:` line.
+- Check the build with `GET /health`, which reports the commit the image was built from.

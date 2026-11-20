@@ -1,0 +1,68 @@
+---
+title: "Templates and palettes"
+description: "The built-in templates and colour palettes, and how you or an agent pick them."
+---
+
+A deck's look is a **template** plus a **palette**. Nothing else sets how a deck looks. A slide never stores its own colour or font.
+
+- A **template** sets the structure and house style: which layouts a deck can use, the outline to follow, the chrome (tracker, footer, progress bar), fonts and shape.
+- A **palette** sets every colour: backgrounds, text, the accent colour, and the positive, negative and caution colours.
+
+## Built-in templates
+
+| Template | Default | For | Layouts it allows |
+|---|---|---|---|
+| `talk` | yes | A talk to a room: a story in parts, one point per slide. | Title, divider, bullets, two-column, compare, big number, quote, image, chart, close |
+| `workshop` | no | A talk plus exercises the room does. | Title, divider, bullets, two-column, practice, compare, quote, image, table, numbered cards, rules, cards, close |
+| `update` | no | A status or metrics report: numbers first, then what is next. | Title, bullets, big number, table, chart, gantt, numbered cards, cards, close |
+
+The `workshop` template lists deep dives on each part's divider and shows the draft mark by default. The `update` template hides the part tracker and puts the date in the footer.
+
+## Built-in palettes
+
+| Palette | Default | Look |
+|---|---|---|
+| Cobalt | yes | Light surfaces with a blue accent. |
+| Ember | no | Light, warm surfaces with an orange accent. |
+| Plum | no | Light surfaces with a violet accent. |
+| Midnight | no | Dark surfaces with a blue accent. |
+
+Each palette is checked for readable contrast on its text and colour pairs. `list_palettes` shows the result.
+
+No built-in template locks a palette, so any palette works with any template.
+
+## Picking a look
+
+You can pick the look in three places:
+
+- **New deck dialog:** choose a template and a palette when you make the deck.
+- **Look panel:** on the deck page, change either at any time.
+- **An agent:** pass `template` and `palette` to `create_deck`, or call `set_look` on an existing deck.
+
+If you leave them out, the deck gets the default template (`talk`) and the palette the template gives it, else the default palette (Cobalt).
+
+An agent finds the names with `list_templates` and `list_palettes`. `list_palettes` can filter by the number of colours in the swatch and by a word such as a colour name or a mood.
+
+## Changing the chrome
+
+The chrome is the part tracker, footer and progress bar. Agents change it with `set_look`:
+
+- `tracker`: on or off.
+- `footer`: `author`, `date` or `off`.
+- `progress`: on or off.
+
+Set a key to null to go back to the template's default. Leave a key out to keep its value.
+
+Add a logo by uploading an image with `upload_image`, then passing its id as `logo` in `set_look`. Pass `null` to remove the logo. Mark a deck as a draft with `draft: true`.
+
+## Changing a deck's look later
+
+Changing the template or palette does not change any slide. A slide whose layout is outside the new template still shows, and the agent gets a warning for it. Consider moving it to a layout the template allows.
+
+## Deep dives
+
+Mark a slide as a deep dive to make it optional. Its speaker notes start with "Deep dive. Skip if short of time." The presenter can skip deep dives when running late. Agents set this with the `deep_dive` option on `add_slide` and `update_slide`.
+
+## Custom templates
+
+Custom templates are coming soon.

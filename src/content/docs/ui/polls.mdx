@@ -1,0 +1,90 @@
+---
+title: "Polls"
+description: "Run live multiple-choice polls in a talk: how a poll gets into a deck, how to open, close and reveal it, and what the room and the phones see."
+---
+
+A poll is a slide. When you reach it, the phones of everyone who joined show the question and the options. The bars on the big screen grow as answers come in.
+
+Polls only run while the deck is live. Press **Go live** first, and the audience joins as described in [Audience join](/ui/audience-join/).
+
+## Adding a poll to a deck
+
+A poll uses the `poll` layout, with one poll per slide.
+
+- A **question** of up to 120 characters.
+- **Two to eight options**, each up to 60 characters. Two options can't have the same text.
+
+An agent adds the poll with `add_slide`, which sets the question and options. Its other settings are set with `update_poll`, which is refused while a round is open. The presenter window shows the settings but doesn't change them.
+
+The settings are:
+
+| Setting | Choices | What it does |
+|---|---|---|
+| Pick | One, or up to a number you set (2 up to the number of options) | Whether each guest picks one option or several. |
+| Results | Live, after answering, or after close | When the room sees the counts. See below. |
+| Correct answer | Optional | Marks one option as right, to show after the poll closes. |
+| Opens | When the presenter reaches the slide, or by hand | Whether the poll opens by itself or waits for **Open**. |
+
+## Running a poll
+
+A poll moves through three states: not open yet (the presenter window calls it **Draft**), **Open** and **Closed**.
+
+- By default, a poll **opens when you reach its slide**, the first time in that live session. If it opens by hand, press **Open poll** when you're ready. Only one poll can be open at a time.
+- It **closes when you press Close poll, or move to another slide**. Coming back to the slide doesn't reopen it. Use **New round**.
+- Ending the live session closes an open poll.
+- **Reveal results** shows the counts to the room while the poll is open, if the room can't see them yet.
+- **Show answer** marks the correct option. It's available after the poll closes, if the poll has a correct answer.
+- **New round** asks the same question again from zero, after the poll closes. Earlier rounds are kept and listed under **Earlier rounds** in the poll panel. The big screen shows only the current round.
+
+In the presenter window, the keys are:
+
+| Key | Does |
+|---|---|
+| `P` | Open the poll, or close it if it's open |
+| `R` | Reveal results |
+| `A` | Show the answer |
+
+New round has no key.
+
+The phone remote has the same controls in a strip under the slide preview. If an action is refused, its message shows above the strip, and a dismiss button clears it.
+
+Only the deck's owner, signed in as a person, can run a poll from the presenter window or the phone remote. An agent working for the owner can open and close a poll on a live deck, with `open_poll` and `close_poll`, and read its results. It can't reveal results, show the answer or start a new round.
+
+## What guests see on their phones
+
+Pick one: a tap sends the answer. Tap another option to change it while the poll is open.
+
+Pick several: tap the options you want, up to the limit, then press **Send answer**. Use **Change my answer** to unlock your picks and choose again.
+
+The phone shows one of these states:
+
+- Before the poll opens, a note says the presenter hasn't opened it yet and that it opens by itself.
+- "Tap an answer to send it." while the poll is open and the guest hasn't answered.
+- **Answer sent**, once the server has the answer. While the poll is open it also shows how many have answered and **Still open**.
+- **Not sent yet** if the connection drops. The pick stays on the phone and sends by itself when the connection is back.
+- **Your answer wasn't sent.** with the reason, and **Send again**, if the answer is refused.
+- "[Presenter name] changed the poll. Send this pick again?" with **Send it** and **Clear**, if the poll changed under the guest's pick.
+- **Poll closed**, with the number of answers. A guest who didn't answer sees "You didn't send an answer for this one."
+- **You joined after this poll closed.** for guests who arrived late.
+
+When the poll has a correct answer and you show it, each phone says "You got it." if the guest picked it, or "Not this time." if not. Nothing is scored.
+
+Each guest can send 30 answers a minute. A guest who goes over is asked to wait.
+
+## What the room sees
+
+The **results** setting decides when counts are visible.
+
+- **Live** (the default): the room sees the counts while the poll is open.
+- **After answering**: each guest sees the counts on their phone once they have answered. The big screen shows them when you reveal them or when the poll closes.
+- **After close**: the room sees the counts when the poll closes.
+
+Your presenter window always shows the counts. A guest's phone shows no counts until that guest has answered, whatever the setting. When the poll closes, every phone shows the final result.
+
+On the big screen, the poll slide shows the question, a bar and a percentage for each option, the poll's state and the number of answers. The state reads **Not open yet**, **Open** or **Closed**. When results are hidden, the bars are hatched and a note says results show when the poll closes. A correct answer is marked once you show it, and the other options fade. With pick several, the percentages are shares of the people who answered, so they can add up to more than 100.
+
+A guest who joins after the poll closes can't answer it.
+
+## Privacy and counts
+
+Polls keep totals only. Nobody can see who picked what, and the server never sends a guest counts they aren't allowed to see.

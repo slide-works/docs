@@ -53,6 +53,22 @@ export const sidebar = [
       {
         "label": "Presenting",
         "link": "/ui/presenting/"
+      },
+      {
+        "label": "Presenter view and phone remote",
+        "link": "/ui/presenter-view/"
+      },
+      {
+        "label": "Audience join",
+        "link": "/ui/audience-join/"
+      },
+      {
+        "label": "Polls",
+        "link": "/ui/polls/"
+      },
+      {
+        "label": "Q&A and reactions (coming soon)",
+        "link": "/ui/qa-reactions/"
       }
     ]
   },
@@ -70,6 +86,10 @@ export const sidebar = [
       {
         "label": "Building blocks",
         "link": "/agents/blocks/"
+      },
+      {
+        "label": "Templates and palettes",
+        "link": "/agents/templates/"
       }
     ]
   },
